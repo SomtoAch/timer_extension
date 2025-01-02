@@ -1,0 +1,88 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+main{
+    height: 200px;
+    width: 350px;
+    background-image: url("./night_background.jpeg");
+    background-size: cover;
+}
+
+#timerRow{
+    height:fill;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+#timerText{
+    color: white;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+#buttonRow{
+    height: fill;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.BTN{
+    margin: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+    padding: 2px;
+}
+
+.BTN:hover{
+    cursor: pointer;
+}
+
+#pauseBTN{
+    background-color: cornflowerblue;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.pauseComponent{
+    width: 15%;
+    height: 55%;
+    background-color: white;
+    border: 1px solid black;
+}
+
+#playBTN{
+    background-color:limegreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.playComponent{
+    height:0;
+    width:0;
+    border-top: 15px solid transparent;
+	border-left: 30px solid white;
+	border-bottom: 15px solid transparent;
+}
+
+#stopBTN{
+    background-color:orangered;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stopComponent{
+    width: 40%;
+    height: 40%;
+    background-color: white;
+    border: 1px solid black;
+}

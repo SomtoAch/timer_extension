@@ -1,0 +1,10 @@
+{
+    "manifest_version": 3,
+    "name": "Simple Timer",
+    "description": "Extension that allows the user to track passed time",
+    "version": "1.0",
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "timer.png"
+    }
+}

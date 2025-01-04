@@ -1,12 +1,12 @@
 body{
     margin: 0;
-    padding: 0;
+    padding: 20px 0px;
 }
 
 main{
     height: 200px;
     width: 250px;
-    background-image: url("./night_background.jpeg");
+    /* background-image: url("./night_background.jpeg"); */
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -24,9 +24,10 @@ main{
 }
 
 #timerText{
-    color: white;
-    font-size: 4rem;
+    color: black;
+    font-size: 3rem;
     font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 #buttonRow{
@@ -58,11 +59,20 @@ main{
 
 #textRow{
     width: 80%;
-    margin: auto;
+    margin: 0 auto;
     height: 2rem;
 }
 
 #activityText{
     height: 100%;
     width: 100%;
+    border: 0;
+    transition:ease-in 250ms;
 }
+
+#activityText:focus{
+        outline: none;
+        border: none;
+        border-bottom: 1px solid grey;
+        
+    }

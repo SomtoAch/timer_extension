@@ -21,14 +21,15 @@ window.onload = () => {
 
 function incrementSeconds(){
     total_time += 1;
-    seconds = total_time % 60;
-    minutes = Math.floor(total_time / 60);
+    total_seconds = Math.round(total_time / 10);
+    seconds = total_seconds % 60;
+    minutes = Math.floor(total_seconds / 60);
     timerText.innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 function pressPlayBTN(){
     console.log('play pressed');
-    intervalID = setInterval(incrementSeconds, 1000);
+    intervalID = setInterval(incrementSeconds, 100);
     playing = true;
     reset = false;
     playBTN.classList.add("hide");

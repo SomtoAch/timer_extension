@@ -1,18 +1,50 @@
 body{
     margin: 0;
-    padding: 20px 0px;
+    padding: 0;
 }
 
 main{
     height: 200px;
     width: 250px;
-    /* background-image: url("./night_background.jpeg"); */
     background-size: cover;
     margin: 0;
-    padding: 0;
+    padding: 20px 0px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+#slider{
+    display: inline-block;
+    position:relative;
+    width: 10px;
+    height: 10px;
+    border: 2px solid black;
+    background-color: white;
+    border-radius: 50%;
+}
+
+#darkToggleLabel{
+    width: 30px;
+    display: flex;
+    cursor: pointer;
+    margin: auto;
+    background-color: grey;
+    border-radius: 10px;
+
+    &.darkMode{
+        background-color: #00bf63;
+    }
+}
+
+label:has(#darkToggle:checked){
+    justify-content: end;
+}
+
+#darkToggle{
+    position: absolute;
+    width: 0;
+    height: 0;
 }
 
 #timerRow{
@@ -24,7 +56,6 @@ main{
 }
 
 #timerText{
-    color: black;
     font-size: 3rem;
     font-weight: bold;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -67,12 +98,15 @@ main{
     height: 100%;
     width: 100%;
     border: 0;
-    transition:ease-in 250ms;
-}
 
-#activityText:focus{
+    &:focus{
         outline: none;
         border: none;
         border-bottom: 1px solid grey;
-        
     }
+}
+
+.darkMode{
+    background-color: black;
+    color: white;
+}

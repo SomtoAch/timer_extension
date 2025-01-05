@@ -8,6 +8,10 @@ const pauseBTN = document.getElementById('pauseBTN');
 const playBTN = document.getElementById('playBTN');
 const stopBTN = document.getElementById('stopBTN');
 const timerText = document.getElementById('timerText');
+const main = document.getElementById('main');
+const darkToggle = document.getElementById('darkToggle');
+const darkToggleLabel = document.getElementById('darkToggleLabel');
+const activityText = document.getElementById('activityText');
 
 window.onload = () => {
     console.log('onload');
@@ -17,6 +21,7 @@ window.onload = () => {
     pauseBTN.addEventListener("click", pressPauseBTN);
     playBTN.addEventListener("click", pressPlayBTN);
     stopBTN.addEventListener("click", pressStopBTN);
+    darkToggle.addEventListener("click", toggleDarkMode);
 }
 
 function incrementSeconds(){
@@ -24,7 +29,15 @@ function incrementSeconds(){
     total_seconds = Math.round(total_time / 10);
     seconds = total_seconds % 60;
     minutes = Math.floor(total_seconds / 60);
-    timerText.innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function toggleDarkMode(){
+    main.classList.toggle('darkMode');
+    timerText.classList.toggle('darkMode');
+    timerText.classList.toggle('darkMode');
+    darkToggleLabel.classList.toggle('darkMode');
+    activityText.classList.toggle('darkMode');
 }
 
 function pressPlayBTN(){

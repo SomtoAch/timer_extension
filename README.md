@@ -1,6 +1,8 @@
 # timer-chrome-extension
 A repository containing the code that goes into making a chrome extension. I will be making a chrome extension that allows the user to track the passing of time.
 
+## [Chrome Webstore Link](https://chromewebstore.google.com/detail/simple-timer/nepbojhapiicaiklcgbhcieldmglnlpn)
+
 ## Requirements
 - Be downloadable on the Chrome Web Store
 - Have an appealing design
@@ -21,3 +23,8 @@ The timer is now fully functional whilst the popup stays open. This is not optim
 - playBTN pressed -> playing=true, reset=false, pauseBTN unhidden, playBTN hidden, stopBTN hidden
 - pauseBTN pressed -> playing=false, reset=false, playBTN unhidden, pauseBTN hidden, stopBTN unhidden
 - stopBTN pressed -> playing=false, reset=true, playBTN unhidden, pauseBTN hidden, stopBTN hidden
+
+### 06/01/2025
+The timer is functional and available on the Chrome Web Store. Users can write down what they are timing, but there is no association with the recorded time, as the recorded time periods are not stored. The user can start the timer, but if they click anywhere outside the extension ( on the omnibar to make a search for example ) the extension's popup disappears and the timer with it.
+
+I want to fix both of these problems with a sidebar, where previous time periods will be displayed, and where started timers will be displayed.

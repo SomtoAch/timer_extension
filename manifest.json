@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Simple Timer",
-    "description": "Extension that allows the user to track passed time",
+    "description": "Record activities and track how you spend your time",
     "version": "1.1",
     "action": {
         "default_popup": "index.html",

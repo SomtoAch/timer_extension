@@ -12,6 +12,7 @@ const main = document.getElementById('main');
 const darkToggle = document.getElementById('darkToggle');
 const darkToggleLabel = document.getElementById('darkToggleLabel');
 const activityText = document.getElementById('activityText');
+const sidePanelButton = document.getElementById('openSidePanel');
 
 window.onload = () => {
     console.log('onload');
@@ -22,6 +23,7 @@ window.onload = () => {
     playBTN.addEventListener("click", pressPlayBTN);
     stopBTN.addEventListener("click", pressStopBTN);
     darkToggle.addEventListener("click", toggleDarkMode);
+    sidePanelButton.addEventListener("click", openSidePanel);
 }
 
 function incrementSeconds(){
@@ -30,6 +32,13 @@ function incrementSeconds(){
     seconds = total_seconds % 60;
     minutes = Math.floor(total_seconds / 60);
     timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+async function openSidePanel(){
+    const window_data = await chrome.windows.getCurrent();
+
+    const response = await chrome.runtime.sendMessage({type:"open_side_panel", window_id: window_data.id});
+    // do something with response here, not outside the function
 }
 
 function toggleDarkMode(){

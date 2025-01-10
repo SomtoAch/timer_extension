@@ -3,11 +3,18 @@
     "name": "Simple Timer",
     "description": "Record activities and track how you spend your time",
     "version": "1.1",
+    "side_panel":{
+        "default_path":"sidepanel.html"
+    },
     "action": {
         "default_popup": "index.html",
         "default_icon": "timer.png"
     },
-    "permisions": [
-        "sidePanel"
-    ]
+    "permissions": [
+        "sidePanel",
+        "tabs"
+    ],
+    "background": {
+        "service_worker": "service-worker.js"
+    }
 }

@@ -39,6 +39,7 @@ async function openSidePanel(){
 
     const response = await chrome.runtime.sendMessage({type:"open_side_panel", window_id: window_data.id});
     // do something with response here, not outside the function
+    window.close();
 }
 
 function toggleDarkMode(){

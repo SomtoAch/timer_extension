@@ -12,6 +12,21 @@ main{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+
+    &.sidepanel{
+        width: 100%;
+    }
+}
+
+#buttonRow{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#openSidePanel{
+    width: 75px;
+    height:30px;
+    margin: auto;
 }
 
 #slider{
@@ -61,7 +76,7 @@ label:has(#darkToggle:checked){
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-#buttonRow{
+#startPauseStopRow{
     height: fill;
     width: 100%;
     display: flex;

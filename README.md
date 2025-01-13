@@ -28,3 +28,10 @@ The timer is now fully functional whilst the popup stays open. This is not optim
 The timer is functional and available on the Chrome Web Store. Users can write down what they are timing, but there is no association with the recorded time, as the recorded time periods are not stored. The user can start the timer, but if they click anywhere outside the extension ( on the omnibar to make a search for example ) the extension's popup disappears and the timer with it.
 
 I want to fix both of these problems with a sidebar, where previous time periods will be displayed, and where started timers will be displayed.
+
+### 12/01/2025
+The sidepanel now exists, but cannot carry out any of the above functions. The first step to achieving these requirements is to get started timers to run in the background, so the timers can be synced between sidepanel, popup, and wherever else they may be needed.
+I *could* do this by sending message betweeen the service worker and script whenever a change occured to the timer.
+
+I would need to store the incrementTimer function in the service worker, and send messages from the script to the service worker when ever the play, pause or stop buttons are pressed. The service worker will have its own interval with its own interval ID, changes to the script's interval will simply be synced with the service worker's interval.
+When the popup/ sidepanel is opened, it will send a message to the service worker requesting time data. Variables that will need to be retrieved are total_time, playing and reset.

@@ -4,7 +4,6 @@ let total_time;
 let seconds;
 let minutes;
 let intervalID;
-let current_state;
 const pauseBTN = document.getElementById('pauseBTN');
 const playBTN = document.getElementById('playBTN');
 const stopBTN = document.getElementById('stopBTN');
@@ -18,13 +17,10 @@ const sidePanelButton = document.getElementById('openSidePanel');
 window.onload = () => {
     console.log('onload');
 
-    getCurrentState().then((current_state) => {
-        console.log(current_state);
-        playing = current_state[0];
-        reset = current_state[1];
-        total_time = current_state[2];
-    })
-    
+    current_state = getCurrentState();
+    playing = current_state[0];
+    reset = current_state[1];
+    total_time = current_state[2];
 
     total_seconds = Math.round(total_time / 10);
     seconds = total_seconds % 60;
@@ -60,8 +56,7 @@ window.onload = () => {
 }
 
 async function getCurrentState(){
-    const r = chrome.runtime.sendMessage({type: 'current_state'});
-    console.log("r", r);
+    const r = await chrome.runtime.sendMessage({type: 'current_state'});
     return r;
 }
 

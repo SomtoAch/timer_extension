@@ -48,12 +48,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             handleStop();
 
         } else if(message.type === 'current_state'){
-            console.log("current state is", playing, reset, total_time);
             return [playing, reset, total_time];
         };
 
         return true;
     })();
-
-    return true;
   });

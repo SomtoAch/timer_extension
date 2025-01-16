@@ -4,6 +4,7 @@ let total_time = 0;
 let seconds = 0;
 let minutes = 0;
 let intervalID = 0;
+let current_state = [playing, reset, total_time];
 const pauseBTN = document.getElementById('pauseBTN');
 const playBTN = document.getElementById('playBTN');
 const stopBTN = document.getElementById('stopBTN');
@@ -13,6 +14,18 @@ const darkToggle = document.getElementById('darkToggle');
 const darkToggleLabel = document.getElementById('darkToggleLabel');
 const activityText = document.getElementById('activityText');
 const sidePanelButton = document.getElementById('openSidePanel');
+
+// Open channel for communication with service worker and send a request for the current state of the service
+var port = chrome.runtime.connect({name: "currentStatePort"});
+port.postMessage({type: "request"});
+
+port.onMessage.addListener(function(msg) {
+  if (msg.type === "request")
+    port.postMessage({type: "response", content: [playing, reset, total_time]});
+  else if (msg.type === "response")
+    console.log(msg.content);
+    current_state = msg.content;
+});
 
 window.onload = () => {
     console.log('onload');

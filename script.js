@@ -1,9 +1,9 @@
-let playing;
-let reset;
-let total_time;
-let seconds;
-let minutes;
-let intervalID;
+let playing = false;
+let reset = true;
+let total_time = 0;
+let seconds = 0;
+let minutes = 0;
+let intervalID = 0;
 const pauseBTN = document.getElementById('pauseBTN');
 const playBTN = document.getElementById('playBTN');
 const stopBTN = document.getElementById('stopBTN');
@@ -16,35 +16,6 @@ const sidePanelButton = document.getElementById('openSidePanel');
 
 window.onload = () => {
     console.log('onload');
-
-    current_state = getCurrentState();
-    playing = current_state[0];
-    reset = current_state[1];
-    total_time = current_state[2];
-
-    total_seconds = Math.round(total_time / 10);
-    seconds = total_seconds % 60;
-    minutes = Math.floor(total_seconds / 60);
-    timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    console.log("time retrieved and set");
-
-    if(playing){
-        intervalID = setInterval(incrementTime, 100);
-        playBTN.classList.add("hide");
-        pauseBTN.classList.remove("hide");
-        stopBTN.classList.add("hide");
-    }else if (!playing && !reset){
-        playBTN.classList.remove("hide");
-        pauseBTN.classList.add("hide");
-        stopBTN.classList.remove("hide");
-    }else if (reset){
-        playBTN.classList.remove("hide");
-        pauseBTN.classList.add("hide");
-        stopBTN.classList.add("hide");
-    } else{
-        console.log("Error in playing & reset configuration");
-    }
-
     pauseBTN.classList.add('hide');
     stopBTN.classList.add('hide');
     playBTN.classList.remove('hide');
@@ -55,12 +26,7 @@ window.onload = () => {
     sidePanelButton.addEventListener("click", openSidePanel);
 }
 
-async function getCurrentState(){
-    const r = await chrome.runtime.sendMessage({type: 'current_state'});
-    return r;
-}
-
-function incrementTime(){
+function incrementSeconds(){
     total_time += 1;
     total_seconds = Math.round(total_time / 10);
     seconds = total_seconds % 60;
@@ -86,15 +52,12 @@ function toggleDarkMode(){
 
 function pressPlayBTN(){
     console.log('play pressed');
-    intervalID = setInterval(incrementTime, 100);
+    intervalID = setInterval(incrementSeconds, 100);
     playing = true;
     reset = false;
     playBTN.classList.add("hide");
     pauseBTN.classList.remove("hide");
     stopBTN.classList.add("hide");
-
-    chrome.runtime.sendMessage({type: 'play'});
-
     console.log('bottom reached');
 }
 
@@ -105,8 +68,6 @@ function pressPauseBTN(){
     pauseBTN.classList.add('hide');
     playBTN.classList.remove('hide');
     stopBTN.classList.remove('hide');
-
-    chrome.runtime.sendMessage({type: 'pause'});
 }
 
 function pressStopBTN(){
@@ -117,6 +78,4 @@ function pressStopBTN(){
     playing=false;
     reset = true;
     stopBTN.classList.add('hide');
-
-    chrome.runtime.sendMessage({type: 'stop'});
 }

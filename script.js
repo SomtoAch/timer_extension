@@ -1,45 +1,121 @@
+let current_state = [];
 let playing = false;
 let reset = true;
 let total_time = 0;
-let seconds = 0;
+let total_seconds = 0;
 let minutes = 0;
-let intervalID = 0;
-let current_state = [playing, reset, total_time];
+let seconds = 0;
+
+
+// get document elements that may need to be manipulated during this script's runtime, and create some event listeners
 const pauseBTN = document.getElementById('pauseBTN');
+pauseBTN.addEventListener("click", pressPauseBTN);
+
 const playBTN = document.getElementById('playBTN');
+playBTN.addEventListener("click", pressPlayBTN);
+
 const stopBTN = document.getElementById('stopBTN');
+stopBTN.addEventListener("click", pressStopBTN);
+
 const timerText = document.getElementById('timerText');
 const main = document.getElementById('main');
 const darkToggle = document.getElementById('darkToggle');
+
 const darkToggleLabel = document.getElementById('darkToggleLabel');
+darkToggle.addEventListener("click", toggleDarkMode);
+
 const activityText = document.getElementById('activityText');
+
 const sidePanelButton = document.getElementById('openSidePanel');
+sidePanelButton.addEventListener("click", openSidePanel);
+// end
 
-// Open channel for communication with service worker and send a request for the current state of the service
-var port = chrome.runtime.connect({name: "currentStatePort"});
-port.postMessage({type: "request"});
 
-port.onMessage.addListener(function(msg) {
-  if (msg.type === "request")
-    port.postMessage({type: "response", content: [playing, reset, total_time]});
-  else if (msg.type === "response")
-    console.log(msg.content);
-    current_state = msg.content;
+
+// Open channel for communication with service worker. This port is specifically for exchanging data about the current state of popup, sidebar and background clocks
+const port = chrome.runtime.connect({name: "port"});
+
+// listen for messages on port. this is an event listener so only needs to be created once.
+port.onMessage.addListener(async function(msg) {
+
+    // if a state_response message is received, set current state to be the msg content, and change the playing, reset and total time values
+    if (msg.type === "state_response"){
+
+        console.log("getting current state");
+
+        current_state.push(...msg.content);
+        let playing = current_state[0];
+        let reset = current_state[1];
+        let total_time = current_state[2];
+        let total_seconds = Math.round(total_time / 10);
+        let seconds = total_seconds % 60;
+        let minutes = Math.floor(total_seconds / 60);
+        timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        // if timer is stopped/ reset
+        if (!playing&&reset){
+            pauseBTN.classList.add("hide");
+            stopBTN.classList.add("hide");
+            playBTN.classList.remove("hide");
+
+        // if timer is playing
+        } else if(playing&&!reset){
+            playBTN.classList.add("hide");
+            pauseBTN.classList.remove("hide");
+            stopBTN.classList.add("hide");
+
+        // if timer is paused
+        } else if(!playing&&!reset){
+            playBTN.classList.remove("hide");
+            pauseBTN.classList.add("hide");
+            stopBTN.classList.remove("hide");
+        } else {
+            console.log("Incorrect current state configuration");
+        }
+        // end
+    }else{
+        console.log("Invalid message type for the port connection between the service worker and content script");
+    }
 });
+// end
 
-window.onload = () => {
-    console.log('onload');
-    pauseBTN.classList.add('hide');
-    stopBTN.classList.add('hide');
-    playBTN.classList.remove('hide');
-    pauseBTN.addEventListener("click", pressPauseBTN);
-    playBTN.addEventListener("click", pressPlayBTN);
-    stopBTN.addEventListener("click", pressStopBTN);
-    darkToggle.addEventListener("click", toggleDarkMode);
-    sidePanelButton.addEventListener("click", openSidePanel);
+
+
+// send a state request to the port. The response updates the current_state variable. Then use the values in the current state variable to create the playing, reset and total_time variables. Create th seconds and minutes variables using total_time, and update timerText with this data
+port.postMessage({type: "state_request"});
+
+
+// end
+
+
+
+
+// if timer is stopped/ reset
+if (!playing&&reset){
+    pauseBTN.classList.add("hide");
+    stopBTN.classList.add("hide");
+    playBTN.classList.remove("hide");
+
+// if timer is playing
+} else if(playing&&!reset){
+    playBTN.classList.add("hide");
+    pauseBTN.classList.remove("hide");
+    stopBTN.classList.add("hide");
+
+// if timer is paused
+} else if(!playing&&!reset){
+    playBTN.classList.remove("hide");
+    pauseBTN.classList.add("hide");
+    stopBTN.classList.remove("hide");
+} else {
+    console.log("Incorrect current state configuration");
 }
+// end
 
-function incrementSeconds(){
+
+
+// function that increments the total_time variable every 10th of a second. Calculates the required seconds and minutes and updates the timer text variable's inner HTML
+function incrementTime(){
     total_time += 1;
     total_seconds = Math.round(total_time / 10);
     seconds = total_seconds % 60;
@@ -47,10 +123,11 @@ function incrementSeconds(){
     timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+// function that is called when user clicks the open Sidepanel button. 
 async function openSidePanel(){
-    const window_data = await chrome.windows.getCurrent();
+    var window_data = await chrome.windows.getCurrent();
 
-    const response = await chrome.runtime.sendMessage({type:"open_side_panel", window_id: window_data.id});
+    var response = await chrome.runtime.sendMessage({type:"open_side_panel", window_id: window_data.id});
     // do something with response here, not outside the function
     window.close();
 }
@@ -65,7 +142,8 @@ function toggleDarkMode(){
 
 function pressPlayBTN(){
     console.log('play pressed');
-    intervalID = setInterval(incrementSeconds, 100);
+    port.postMessage({type: "play"});
+    intervalID = setInterval(incrementTime, 100);
     playing = true;
     reset = false;
     playBTN.classList.add("hide");
@@ -75,6 +153,8 @@ function pressPlayBTN(){
 }
 
 function pressPauseBTN(){
+    console.log("pause pressed");
+    port.postMessage({type: "pause"});
     clearInterval(intervalID);
     playing = false;
     reset=false;
@@ -84,6 +164,8 @@ function pressPauseBTN(){
 }
 
 function pressStopBTN(){
+    console.log("stop pressed");
+    port.postMessage({type: "stop"});
     total_time = 0;
     seconds = total_time % 60;
     minutes = Math.floor(total_time / 60);

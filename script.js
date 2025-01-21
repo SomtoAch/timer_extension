@@ -42,7 +42,6 @@ port.onMessage.addListener(async function(msg) {
     if (msg.type === "state_response"){
 
         console.log("getting current state");
-
         current_state.push(...msg.content);
         let playing = current_state[0];
         let reset = current_state[1];

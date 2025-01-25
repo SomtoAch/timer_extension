@@ -1,9 +1,10 @@
-let playing = false;
-let reset = true;
-let total_time = 0;
+//let playing = false;
+//let reset = true;
+//let total_time = 0;
 let current_state = [playing, reset, total_time];
 let intervalID = 0;
 
+// function that increments the script's clock by 1
 function incrementTime(){
     total_time += 1;
     if (total_time%10==0){
@@ -11,6 +12,7 @@ function incrementTime(){
     };
 }
 
+// called when the script receives a play message from the content script. Starts an 'interval' that repeatedly calls incrementTime every 100ms
 function handlePlay(){
     // increment total_time by 1 every 10th of a second
     intervalID = setInterval(incrementTime, 100);
@@ -18,6 +20,7 @@ function handlePlay(){
     reset = false;
 }
 
+// called when the script receives a pause message from the content script. Stops the interval set by handlePlay
 function handlePause(){
     clearInterval(intervalID);
     console.log("interval cleared");
@@ -25,14 +28,12 @@ function handlePause(){
     reset = false;
 }
 
+// called when the script receives a stop message from the content script. Resets the script's clock
 function handleStop(){
     playing = false;
     reset = true;
     total_time = 0;
 }
-
-// to find the windowId of the active tab
-let window_Id = 0;
 
 // to receive messages from popup script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

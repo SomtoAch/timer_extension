@@ -1,10 +1,10 @@
-let current_state = [];
-let playing = false;
-let reset = true;
-let total_time = 0;
-let total_seconds = 0;
-let minutes = 0;
-let seconds = 0;
+var current_state = [];
+var playing = false;
+var reset = true;
+var total_time = 0;
+var total_seconds = 0;
+var minutes = 0;
+var seconds = 0;
 
 
 // get document elements that may need to be manipulated during this script's runtime, and create some event listeners
@@ -42,14 +42,16 @@ port.onMessage.addListener(async function(msg) {
     if (msg.type === "state_response"){
 
         console.log("getting current state");
+        console.log(msg.content)
         current_state.push(...msg.content);
-        let playing = current_state[0];
-        let reset = current_state[1];
-        let total_time = current_state[2];
-        let total_seconds = Math.round(total_time / 10);
-        let seconds = total_seconds % 60;
-        let minutes = Math.floor(total_seconds / 60);
+        playing = current_state[0];
+        reset = current_state[1];
+        total_time = current_state[2];
+        total_seconds = Math.round(total_time / 10);
+        seconds = total_seconds % 60;
+        minutes = Math.floor(total_seconds / 60);
         timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        console.log("Total time after state response: ", total_time);
 
         // if timer is stopped/ reset
         if (!playing&&reset){
@@ -59,6 +61,7 @@ port.onMessage.addListener(async function(msg) {
 
         // if timer is playing
         } else if(playing&&!reset){
+            intervalID = setInterval(incrementTime, 100);
             playBTN.classList.add("hide");
             pauseBTN.classList.remove("hide");
             stopBTN.classList.add("hide");
@@ -115,7 +118,7 @@ if (!playing&&reset){
 
 // function that increments the total_time variable every 10th of a second. Calculates the required seconds and minutes and updates the timer text variable's inner HTML
 function incrementTime(){
-    total_time += 1;
+    total_time++;
     total_seconds = Math.round(total_time / 10);
     seconds = total_seconds % 60;
     minutes = Math.floor(total_seconds / 60);
@@ -140,7 +143,7 @@ function toggleDarkMode(){
 }
 
 function pressPlayBTN(){
-    console.log('play pressed');
+    console.log('play pressed, total time:', total_time);
     port.postMessage({type: "play"});
     intervalID = setInterval(incrementTime, 100);
     playing = true;

@@ -12,7 +12,8 @@
     },
     "permissions": [
         "sidePanel",
-        "tabs"
+        "tabs",
+        "offscreen"
     ],
     "background": {
         "service_worker": "service-worker.js"

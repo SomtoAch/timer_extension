@@ -1,7 +1,6 @@
-//let playing = false;
-//let reset = true;
-//let total_time = 0;
-let current_state = [playing, reset, total_time];
+let playing = false;
+let reset = true;
+let total_time = 0;
 let intervalID = 0;
 
 // function that increments the script's clock by 1
@@ -59,12 +58,13 @@ chrome.runtime.onConnect.addListener(function(port) {
         if (msg.type === "state_request"){
 
             // send a response message with the current state of the background timer as the content
-            console.log("current state in the service-worker file, before posting msg: ", current_state);
-            port.postMessage({type: "state_response", content: current_state});
+            console.log("current state in the service-worker file, before posting msg: ", [playing, reset, total_time]);
+            port.postMessage({type: "state_response", content: [playing, reset, total_time]});
 
         }else if (msg.type === "play"){
 
             // if a play message is received, call handlePlay
+            console.log("calling handlePlay")
             handlePlay();
 
         }else if (msg.type === "pause"){
@@ -76,6 +76,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         }else if (msg.type === "stop"){
 
             // if a stop message is received, call handleStop
+            console.log("calling handleStop")
             handleStop();
     
         }else{
@@ -83,3 +84,18 @@ chrome.runtime.onConnect.addListener(function(port) {
         }
     });
 });
+// end
+
+// code to help keep service worker running and stop it terminating after 30 seconds of inactivity
+async function createOffscreen() {
+    await chrome.offscreen.createDocument({
+      url: 'offscreen.html',
+      reasons: ['BLOBS'],
+      justification: 'keep service worker running',
+    }).catch(() => {});
+}
+chrome.runtime.onStartup.addListener(createOffscreen);
+self.onmessage = e => {}; // keepAlive
+createOffscreen();
+
+// end

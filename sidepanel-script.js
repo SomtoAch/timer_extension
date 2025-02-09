@@ -6,7 +6,6 @@ var total_seconds = 0;
 var minutes = 0;
 var seconds = 0;
 
-
 // get document elements that may need to be manipulated during this script's runtime, and create some event listeners
 const pauseBTN = document.getElementById('pauseBTN');
 pauseBTN.addEventListener("click", pressPauseBTN);
@@ -19,6 +18,7 @@ stopBTN.addEventListener("click", pressStopBTN);
 
 const timerText = document.getElementById('timerText');
 const main = document.getElementById('main');
+const body = document.getElementById('body');
 const darkToggle = document.getElementById('darkToggle');
 
 const darkToggleLabel = document.getElementById('darkToggleLabel');
@@ -26,17 +26,24 @@ darkToggle.addEventListener("click", toggleDarkMode);
 
 const activityText = document.getElementById('activityText');
 
-const sidePanelButton = document.getElementById('openSidePanel');
-sidePanelButton.addEventListener("click", openSidePanel);
 // end
 
-
+// set up buttons
+// if timer is stopped/ reset
+if (!playing&&reset){
+    pauseBTN.classList.add("hide");
+    stopBTN.classList.add("hide");
+    playBTN.classList.remove("hide");
+}
+// end
 
 // Open channel for communication with service worker. This port is specifically for exchanging data about the current state of popup, sidebar and background clocks
-const port = chrome.runtime.connect({name: "extension-port"});
+const port = chrome.runtime.connect({name: "sidepanel-port"});
 
 // listen for messages on port. this is an event listener so only needs to be created once.
 port.onMessage.addListener(async function(msg) {
+
+    console.log("message received");
 
     // if a state_response message is received, set current state to be the msg content, and change the playing, reset and total time values
     if (msg.type === "state_response"){
@@ -53,6 +60,7 @@ port.onMessage.addListener(async function(msg) {
         timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         console.log("Total time after state response: ", total_time);
 
+        console.log("Above if statements");
         // if timer is stopped/ reset
         if (!playing&&reset){
             pauseBTN.classList.add("hide");
@@ -81,40 +89,8 @@ port.onMessage.addListener(async function(msg) {
 });
 // end
 
-
-
 // send a state request to the port. The response updates the current_state variable. Then use the values in the current state variable to create the playing, reset and total_time variables. Create th seconds and minutes variables using total_time, and update timerText with this data
 port.postMessage({type: "state_request"});
-
-
-// end
-
-
-
-
-// if timer is stopped/ reset
-if (!playing&&reset){
-    pauseBTN.classList.add("hide");
-    stopBTN.classList.add("hide");
-    playBTN.classList.remove("hide");
-
-// if timer is playing
-} else if(playing&&!reset){
-    playBTN.classList.add("hide");
-    pauseBTN.classList.remove("hide");
-    stopBTN.classList.add("hide");
-
-// if timer is paused
-} else if(!playing&&!reset){
-    playBTN.classList.remove("hide");
-    pauseBTN.classList.add("hide");
-    stopBTN.classList.remove("hide");
-} else {
-    console.log("Incorrect current state configuration");
-}
-// end
-
-
 
 // function that increments the total_time variable every 10th of a second. Calculates the required seconds and minutes and updates the timer text variable's inner HTML
 function incrementTime(){
@@ -125,17 +101,10 @@ function incrementTime(){
     timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// function that is called when user clicks the open Sidepanel button. 
-async function openSidePanel(){
-    var window_data = await chrome.windows.getCurrent();
-
-    var response = await chrome.runtime.sendMessage({type:"open_side_panel", window_id: window_data.id});
-    // do something with response here, not outside the function
-    window.close();
-}
+// end
 
 function toggleDarkMode(){
-    main.classList.toggle('darkMode');
+    body.classList.toggle('darkMode');
     timerText.classList.toggle('darkMode');
     timerText.classList.toggle('darkMode');
     darkToggleLabel.classList.toggle('darkMode');

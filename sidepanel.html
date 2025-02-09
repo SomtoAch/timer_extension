@@ -6,7 +6,7 @@
     <title>Simple Timer Sidepanel</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="sidepanel">
+<body class="sidepanel" id="body">
     
     <main id="main" class="sidepanel">
         <div id="buttonRow" class="sidepanel">
@@ -15,29 +15,29 @@
                 <div id="slider" class="sidepanel"></div>
             </label>
         </div>
-        <div id="timerRow">
-            <span id="timerText">00:00</span>
+        <div id="timerRow" class="sidepanel">
+            <span id="timerText" class="sidepanel">00:00</span>
         </div>
-        <div id="startPauseStopRow">
+        <div id="startPauseStopRow" class="sidepanel">
 
-                <div class="BTN" id = "pauseBTN">
-                    <img src="pauseBTN1.png" alt="pause button" class="BTNImage" id="pauseBTNImage">
+                <div class="sidepanel BTN" id = "pauseBTN">
+                    <img src="pauseBTN1.png" alt="pause button" class="sidepanel BTNImage" id="pauseBTNImage">
                 </div>
 
-                <div class="BTN" id = "playBTN">
-                    <img src="playBTN1.png" alt="play button" class="BTNImage" id="playBTNImage">
+                <div class="sidepanel BTN" id = "playBTN">
+                    <img src="playBTN1.png" alt="play button" class="sidepanel BTNImage" id="playBTNImage">
                 </div>
 
-                <div class="BTN" id = "stopBTN">
-                    <img src="stopBTN1.png" alt="stop button" class="BTNImage" id="stopBTNImage">
+                <div class="sidepanel BTN" id = "stopBTN">
+                    <img src="stopBTN1.png" alt="stop button" class="sidepanel BTNImage" id="stopBTNImage">
                 </div>
 
         </div>
-        <div id="textRow">
-            <input type="text" name="activityText" id="activityText" placeholder="What are you timing today?">
+        <div id="textRow" class="sidepanel">
+            <input type="text" name="activityText" id="activityText" placeholder="What are you timing today?" class="sidepanel">
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <script src="sidepanel-script.js"></script>
 </body>
 </html>

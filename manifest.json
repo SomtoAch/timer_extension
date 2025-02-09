@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Simple Timer",
     "description": "Record activities and track how you spend your time",
-    "version": "1.1",
+    "version": "1.2",
     "side_panel":{
         "default_path":"sidepanel.html"
     },

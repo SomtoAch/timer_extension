@@ -76,8 +76,13 @@ chrome.runtime.onConnect.addListener(function(port) {
         }else if (msg.type === "stop"){
 
             // if a stop message is received, call handleStop
-            console.log("calling handleStop")
+            console.log("calling handleStop");
             handleStop();
+            let activity_text = msg.activity_text;
+            let msgtotal_time = msg.total_time;
+            chrome.storage.local.set({ [activity_text]: msgtotal_time }).then(() => {
+                console.log("Key", activity_text, "has been stored alongside value", msgtotal_time);
+              });
     
         }else{
             console.log("Invalid message type in port");

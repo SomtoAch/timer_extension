@@ -26,6 +26,8 @@ darkToggle.addEventListener("click", toggleDarkMode);
 
 const activityText = document.getElementById('activityText');
 
+const pastTimes = document.getElementById('pastTimes');
+
 // end
 
 // set up buttons
@@ -135,8 +137,8 @@ function pressPauseBTN(){
 }
 
 function pressStopBTN(){
-    console.log("stop pressed");
-    port.postMessage({type: "stop"});
+    console.log("stop pressed, activity value:", activityText.value, ", total time:", total_time);
+    port.postMessage({type: "stop", activity_text: activityText.value, total_time: total_time});
     total_time = 0;
     seconds = total_time % 60;
     minutes = Math.floor(total_time / 60);
@@ -145,3 +147,16 @@ function pressStopBTN(){
     reset = true;
     stopBTN.classList.add('hide');
 }
+
+function loadPastTimes(){
+    chrome.storage.local.get().then((result) => {
+        for(key in result){
+            total_seconds = Math.round(result[key] / 10);
+            seconds = total_seconds % 60;
+            minutes = Math.floor(total_seconds / 60);
+            pastTimes.innerHTML+=`<div class="activityTextContainer"><p class="activityText">${key}</p><p class="activityTextTime">${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</p></div>\n`;
+        }
+    });
+};
+
+window.onload = loadPastTimes();

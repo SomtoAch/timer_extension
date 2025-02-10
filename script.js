@@ -166,8 +166,8 @@ function pressPauseBTN(){
 }
 
 function pressStopBTN(){
-    console.log("stop pressed");
-    port.postMessage({type: "stop"});
+    console.log("stop pressed, activity value:", activityText.value, ", total time:", total_time);
+    port.postMessage({type: "stop", activity_text: activityText.value, total_time: total_time});
     total_time = 0;
     seconds = total_time % 60;
     minutes = Math.floor(total_time / 60);
